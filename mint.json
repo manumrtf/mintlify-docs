@@ -62,7 +62,8 @@
       "pages": [
         "guides/authentication",
         "guides/payments",
-        "guides/emails"
+        "guides/emails",
+        "guides/database"
       ]
     },
     {

@@ -124,3 +124,52 @@ If you want to customize more things in your emails like the variables passed, h
                 })
             }
  ```
+
+#### 2.4 Invoice paid email
+```ts src/server/helpers/events/invoice-paid.ts
+  //send loops email of invoice paid
+    if (LOOPS_INVOICE_PAID_EMAIL) {
+        const email = await sendTransactionalEmail({
+            email: customerEmail,
+            transactionalId: LOOPS_INVOICE_PAID_EMAIL,
+            dataVariables: {
+                email: customerEmail
+            }
+        })
+    }
+```
+
+#### 2.5 Invoice failed email
+
+```ts src/app/api/webhooks/stripe.ts
+case "invoice.payment_failed":
+            // ❌ Payment failed, usually for recurring payments
+            // The ideal is not to block the user access, but to notify the user and wait for customer.subscription.deleted event to block the access
+            console.log("Payment failed ❌")
+
+            if (LOOPS_INVOICE_FAILED_EMAIL && event.data.object.customer_email) {
+                const customerEmail = event.data.object.customer_email;
+                await sendTransactionalEmail({
+                    email: customerEmail,
+                    transactionalId: LOOPS_INVOICE_FAILED_EMAIL,
+                    dataVariables: {
+                        email: customerEmail,
+                    }
+                })
+            }
+            ```
+
+
+#### 2.6 Customer subscription deleted email
+```ts src/server/helpers/events/customer-subscription-deleted.ts
+  //send loops email of deleted subscription
+    if (LOOPS_SUBSCRIPTION_DELETED_EMAIL) {
+        const email = await sendTransactionalEmail({
+            email: customerEmail,
+            transactionalId: LOOPS_SUBSCRIPTION_DELETED_EMAIL,
+            dataVariables: {
+                email: customerEmail
+            }
+        })
+    }
+```

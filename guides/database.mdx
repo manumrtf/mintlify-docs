@@ -1,0 +1,163 @@
+---
+title: Database
+description: Learn how to work with databases in shipit
+icon: database
+---
+
+## Default database
+By default, shipit uses an sqlite file as the database. This is useful for development purposes, 
+since you don't need to configure anything to start working with the database.
+Before you ship your app to production, you will want to add something more robust.
+Thanks to Prisma, you can easily switch to a different database like PostgreSQL, MySQL, etc
+
+## Using Turso 
+Turso is really good because it takes sqlite and make it production ready. 
+giving you all the advantages of sqlite plus the robustness of a production database.
+And you can have up till 500 databases for free!
+
+Before start setting it up, make sure to have the following if you don't have it yet:
+
+1. Create an account in [Turso](https://turso.tech/)
+2. Create a new database
+3. Install the [Turso CLI](https://docs.turso.tech/cli/installation)
+
+Now we can get started.
+
+
+### 1. Install the libSQL SDK and its Prisma driver
+```bash
+npm install @libsql/client @prisma/adapter-libsql
+```
+### 2. Retrieve database credentials
+
+Get the database URL:
+```bash
+turso db show --url <database-name>
+```
+Get the database authentication token:
+```bash
+turso db tokens create <database-name>
+```
+
+### 3. Set the environment variables
+
+If you read the [Environment Variables](/docs/settings/environment-variables) documentation,
+you know that shipit uses typesafe environment variables.
+So the first step is declare two new environment variables, `TURSO_DATABASE_URL` and `TURSO_AUTH_TOKEN`
+ 
+```ts src/env.ts
+import { createEnv } from "@t3-oss/env-nextjs";
+import { z } from "zod";
+
+export const env = createEnv({
+    server: {
+        DATABASE_URL: z.string().url(),
+        GOOGLE_CLIENT_ID: z.string().min(1),
+        GOOGLE_CLIENT_SECRET: z.string().min(1),
+        GITHUB_CLIENT_ID: z.string().min(1),
+        GITHUB_CLIENT_SECRET: z.string().min(1),
+        LOOPS_API_KEY: z.string().min(1),
+        STRIPE_SECRET_KEY: z.string().min(1),
+        STRIPE_WEBHOOK_SECRET: z.string().min(1),
+        NEXTAUTH_SECRET: z.string().min(1),
+        NEXTAUTH_URL: z.string().url(),
+        TURSO_DATABASE_URL: z.string().url(),
+        TURSO_AUTH_TOKEN: z.string().min(1),
+    },
+    client: {
+        NEXT_PUBLIC_CRISP_WEBSITE_ID: z.string().min(1).optional(),
+        NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: z.string().min(1),
+
+    },
+
+    // For Next.js >= 13.4.4, you only need to destructure client variables:
+    experimental__runtimeEnv: {
+        NEXT_PUBLIC_CRISP_WEBSITE_ID: process.env.NEXT_PUBLIC_CRISP_WEBSITE_ID,
+        NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
+    }
+});
+```
+
+Now our applications know this environment variables are required and will throw an error if they are not set.
+
+Once you have the environment variables defined, you can now go the `.env` file 
+and set the values with the ones returned by the Turso CLI commands.:
+
+```bash
+TURSO_DATABASE_URL="database-url"
+TURSO_AUTH_TOKEN="auth-token"
+```
+
+### 4. Enable the prisma `driverAdapters` preview feature flag:
+
+```bash schema.prisma
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+```
+
+### 4. Add the prisma adapter
+
+Go to `src/server/db.ts` and replace the content with the following:
+
+```ts src/server/db.ts
+import { createClient } from "@libsql/client";
+import { PrismaClient } from "@prisma/client";
+import { PrismaLibSQL } from "@prisma/adapter-libsql";
+
+const createLibSqlClient = () =>
+  createClient({
+    url: process.env.TURSO_DATABASE_URL!,
+    authToken: process.env.TURSO_AUTH_TOKEN!,
+  });
+
+const createPrismaClient = () =>
+  new PrismaClient({
+    log: process.env.NODE_ENV === "development" ? ["error", "warn"] : ["error"],
+    adapter: new PrismaLibSQL(createLibSqlClient())
+     
+  });
+
+const globalForPrisma = globalThis as unknown as {
+  prisma: ReturnType<typeof createPrismaClient> | undefined;
+};
+
+export const db = globalForPrisma.prisma ?? createPrismaClient();
+```
+
+### 5. Generate the Prisma client
+
+```bash
+npx prisma generate
+```
+
+### 6. Update the database schema
+
+Now you need to push your prisma schema to the turso database, you can do this by:
+
+1. Create a new migration
+```bash
+npx prisma migrate dev --name init
+```
+2. Apply the migration using Turso's CLI
+```bash
+turso db shell turso-prisma-db < ./prisma/migrations/20230922132717_init/migration.sql
+```
+
+<Info>
+Replace `turso-prisma-db` with your database name and `20230922132717_init` with the name of the migration you created.
+</Info>
+
+## Using Railway
+Railway is also a great option if you want MySQL or PostgreSQL databases.
+
+Go to the [Railway](https://railway.app/) website and create an account.
+
+Then create a database, go to `Variables`and copy the database URL. 
+If you are using MySQL it will be called `MYSQL_URL`.
+Now just copy the URL and set it into the `.env` file.
+
+```bash
+DATABASE_URL="database-url"
+```
