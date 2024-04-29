@@ -1,0 +1,126 @@
+---
+title: "Emails"
+description: "Learn to setup emails in shipit"
+icon: 'at'
+---
+
+shipit uses loops.so to send emails. To configure your email settings, you need to create an account in loops.so and get your API key.
+You can can check the environment variables documentation to know how to fill the `LOOPS_API_KEY` variable.
+
+## Magic Link Email
+When a user signs up using magic link, a transactional email is sent to the user with a link to login.
+To do that, you need to go to your loops account, and create a transactional email.
+The email will get two variables, `app_name` and `url`.
+`app_name` will be replaced by the app name you configured on the project settings, and `url` will be replaced by the login link.
+
+Follow this video to see how to create a transactional email for this purpose
+
+<iframe width="700" height="400" src="https://www.loom.com/embed/502a3bd8e96440efbcd5157f430e5aa6?sid=93bd33d3-c326-4b4a-abcc-d4b1432d0b08"
+frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen >
+</iframe>
+
+Once you have the transactional email id, copy it and paste it in the 
+
+```ts src/app_settings.ts
+LOOPS_MAGIC_LINK_EMAIL="your_transactional_email_id"
+```
+Magic Link email should now be working.
+
+## Stripe emails
+
+There are different emails that you can send when some stripe events happen. Here is the list of the emails that you can configure:
+
+```ts src/app_settings.ts
+// the transactional id of the loops email that you want to send when a user subscribes (let this null if you don't want to send an email when a user subscribes)
+export const LOOPS_SUBSCRIPTION_EMAIL = null;
+// the transactional id of the loops email that you want to send when a user abandons a cart (let this null if you don't want to send an email when a user abandons a cart)
+export const LOOPS_ABANDONED_CART_EMAIL = null;
+// the transactional id of the loops email that you want to send when a user invoice is paid (recurrent payment) (let this null if you don't want to send an email when a user invoice is paid
+export const LOOPS_INVOICE_PAID_EMAIL = null;
+// the transactional id of the loops email that you want to send when a user invoice payment fails (recurrent payment) (let this null if you don't want to send an email when a user invoice payment fails
+export const LOOPS_INVOICE_FAILED_EMAIL = null;
+// the transactional id of the loops email that you want to send when a user subscription is deleted (let this null if you don't want to send an email when a user subscription is deleted
+export const LOOPS_SUBSCRIPTION_DELETED_EMAIL = null;
+```
+
+If you wish to send an email on any of these events, you need to create a transactional email in loops and paste the transactional email id in the corresponding variable.
+
+## User segmentation
+
+An user can be divided into two segments, `subscribed` and `nonsuscribed`. 
+By default, when a user creates an account in your app they are in the `nonsuscribed` segment.
+When a user subscribes, they are moved to the `subscribed` segment.
+This allow you to send emails to specific segments of your users. Very useful for marketing purposes.
+
+You can customize the name of the segments in the `app_settings.ts` file.
+
+```ts src/app_settings.ts
+export const LOOPS_NOSUSCRIBED_GROUP = "nonsuscribed";
+export const LOOPS_SUSCRIBED_GROUP = "subscribed";
+```
+
+<Tip>
+Every stripe email has the customer email passed as variable called `email`, so you can reference it in the loop email.
+</Tip>
+
+## Further customize your emails
+If you want to customize more things in your emails like the variables passed, here is the location of each email in the code:
+
+### 1. Magic link email
+```ts src/server/auth/providers.ts
+ EmailProvider({
+    async sendVerificationRequest({ identifier: email, url }) {
+      await sendTransactionalEmail({
+        transactionalId: LOOPS_MAGIC_LINK_EMAIL,
+        email,
+        dataVariables: { app_name: APP_NAME, url },
+      });
+    },
+  }),
+```
+### 2. User subscription email
+#### 2.1 One-time payments email 
+
+```ts server/helpers/stripe/events/checkout-session-completed.ts
+        // send loops email for one-time payments
+        if (LOOPS_SUBSCRIPTION_EMAIL && customerEmail) {
+            const email = await sendTransactionalEmail({
+                email: customerEmail,
+                transactionalId: LOOPS_SUBSCRIPTION_EMAIL,
+                dataVariables: {
+                    email: customerEmail
+                }
+            })
+        }
+        ```
+
+#### 2.2 Recurrent payments email
+
+```ts server/helpers/stripe/events/checkout-session-completed.ts
+    //send loops email of a recurring payment
+    if (LOOPS_SUBSCRIPTION_EMAIL) {
+        const email = await sendTransactionalEmail({
+            email: customerEmail,
+            transactionalId: LOOPS_SUBSCRIPTION_EMAIL,
+            dataVariables: {
+                email: customerEmail
+            }
+        })
+    }
+```
+
+#### 2.3 Abandoned cart email
+```ts src/app/api/webhooks/stripe.ts
+ case "checkout.session.expired":
+            // ❔🛒 User didn't complete the payment, useful for tracking abandoned carts
+            const customerEmail = event.data.object.customer_email;
+            if (customerEmail && LOOPS_ABANDONED_CART_EMAIL) {
+                await sendTransactionalEmail({
+                    email: customerEmail,
+                    transactionalId: LOOPS_ABANDONED_CART_EMAIL,
+                    dataVariables: {
+                        email: customerEmail,
+                    }
+                })
+            }
+ ```

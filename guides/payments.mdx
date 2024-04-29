@@ -1,0 +1,59 @@
+---
+title: 'Payments'
+description: 'Learn how to setup payments in shipit'
+icon: 'credit-card'
+---
+
+## Create the plans
+Go to your stripe account and create a product with your plan name, for example `Basic Plan`. 
+Set a name, ammount and if it's a recurring plan or not.
+
+Click on the product you just created and go to the `Pricing section`.
+There, copy the content of the `API_ID` field. should look something like this: `price_xxxxxxxxxxxxxx`.
+
+Repeat the process for each plan you want to create.
+
+## Adding it to your app
+
+open the `app_settings.ts` file located at the `src` folder and fill the `plans` array with the plans you just created.
+
+Let's put as an example that I have 3 plans, `Basic`, `Standard` and `Premium`.
+
+The basic and premium plans are recurring plans, while the standard plan is a one-time payment. The config would look like this:
+
+```ts src/app_settings.ts
+export const STORE_PLANS = [
+  {
+    title: "Basic",
+    price: "$99",
+    description:
+      "Best for small business owners, startups who needs landing page for their business.",
+    features: ["Thing number 1", "Thing number 2", "Thing number 3"],
+    priceId: "price_xxxxxxxxxxxxxx",
+    type: "recurring"
+  },
+  {
+    title: "Standard",
+    price: "$199",
+    description:
+      "Best for small business owners, startups who needs landing page for their business.",
+    features: ["Thing number 1", "Thing number 2", "Thing number 3", "Thing number 4"],
+    highlight: true,
+    priceId: "price_xxxxxxxxxxxxxx",
+    type: "one-time"
+
+  },
+  {
+    title: "Premium",
+    price: "$299",
+    description:
+      "Best for small business owners, startups who needs landing page for their business.",
+    features: ["Thing number 1", "Thing number 2", "Thing number 3", "Thing number 4", "Thing number 5"],
+    priceId: "price_xxxxxxxxxxxxxx",
+    type: "recurring"
+
+  },
+];
+```
+
+That's it! Now you have your plans configured in your app. Navigate to the `/pricing` page and you should see your plans there.

@@ -1,22 +1,71 @@
 ---
 title: Introduction
-description: 'Welcome to the home of your new documentation'
+description: 'Get started with shipit'
 ---
 
-<img
-  className="block dark:hidden"
-  src="/images/hero-light.svg"
-  alt="Hero Light"
-/>
-<img
-  className="hidden dark:block"
-  src="/images/hero-dark.svg"
-  alt="Hero Dark"
-/>
+
 
 ## Setting up
 
-The first step to world-class documentation is setting up your editing environments.
+Get started with shipit is really simple, just follow these steps:
+
+### 1. Clone the repository
+
+Open a terminal and run the following command:
+
+```bash
+git clone repo
+```
+
+### 2. Install dependencies
+```bash
+cd shipit
+npm install
+```
+### 3. Fill the database
+For a quick development, shipit use sqlite as database by default. To fill the database with the neccesary tables, run the following command:
+```bash
+npx prisma db push
+npx prisma generate
+```
+### 4. Fill the environment variables
+Create a `.env` file in the root of the proyect and copy-paste the content from the `.env.example` file.
+The file will look like this:
+```bash
+DATABASE_URL="file:./dev.sqlite"
+GOOGLE_CLIENT_ID=""
+GOOGLE_CLIENT_SECRET=""
+GITHUB_CLIENT_ID=""
+GITHUB_CLIENT_SECRET=""
+LOOPS_API_KEY=""
+NEXT_PUBLIC_CRISP_WEBSITE_ID=""
+STRIPE_SECRET_KEY=""
+STRIPE_WEBHOOK_SECRET=""
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=""
+NEXTAUTH_URL="http://localhost:3000"
+NEXTAUTH_SECRET="change_this_secret_on_production"
+```
+
+If you need help to fill the environment variables, please refer to the [Environment Variables](/docs/settings/environment-variables) documentation.
+
+### 5. Make it yours with the app settings
+
+There are a lot of things you can customize easy and quick in `app_settings.ts` file located at the src folder.
+You can know further about what each setting does in the [App Settings](/docs/settings/app-settings) documentation.
+
+### 6. Configure your payment plans
+To configure your plans, checkout the [plans section](/docs/settings/app-settings) in the settings documentation.
+
+### 7. Configure your email settings
+To configure your email settings, checkout the [email section](/docs/settings/app-settings) in the settings documentation.
+
+### 8. It's done! start the development server
+
+```bash
+npm run dev
+```
+
+This guides may be useful for you:
 
 <CardGroup cols={2}>
   <Card
@@ -35,9 +84,7 @@ The first step to world-class documentation is setting up your editing environme
   </Card>
 </CardGroup>
 
-## Make it yours
 
-Update your docs to your brand and add valuable content for the best user conversion.
 
 <CardGroup cols={2}>
   <Card
