@@ -63,18 +63,19 @@
         "guides/authentication",
         "guides/payments",
         "guides/emails",
-        "guides/database"
+        "guides/database",
+        "guides/seo"
       ]
     },
     {
-      "group": "Essentials",
+      "group": "Core",
       "pages": [
-        "essentials/markdown",
-        "essentials/code",
-        "essentials/images",
-        "essentials/settings",
-        "essentials/navigation",
-        "essentials/reusable-snippets"
+        "core/settings",
+        "core/markdown",
+        "core/code",
+        "core/images",
+        "core/navigation",
+        "core/reusable-snippets"
       ]
     },
     {

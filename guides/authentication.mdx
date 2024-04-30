@@ -29,6 +29,82 @@ if you have a dashboard folder inside the subscribed folder, the url will be `/d
 
 The protection is possible thanks to the `layout.tsx` file located in each of the folders.
 
+### Protecting routes for a specific subscription plan
+Besides you would usually have the same routes for all the subscribers, but with different functionalities,
+there are cases where you would like to have different routes for different subscription plans.
+To achieve this, create a folder with the name of the plan inside the `(subscribed)` folder.
+you can wrap the folder with parentheses to avoid URL changes.
+
+```
+📦(suscribed)
+ ┣ 📦(premium)
+    ┣ 📜page.tsx
+    ┣ 📜layout.tsx
+```
+Now we can use the layout to protect all the routes within the folder for the premium plan.
+
+#### For recurring subscriptions.
+
+```tsx src/app/suscribed/premium/layout.tsx
+
+import { redirect } from "next/navigation";
+
+export default async function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
+    const session = await getServerSession(authOptions);
+    const subscriptionId = session?.user?.subscriptionId
+    const oneTimeProductId = session?.user?.oneTimeProductId;
+    const planName = await getPlanName({ subscriptionId });
+
+    if (planName.toLowerCase() !== "premium") {
+         return redirect(NON_AUTHENTICATED_REDIRECT_URL)
+    }
+    else {
+        return children
+    }
+
+}
+```
+#### For one-time payments.
+
+```tsx src/app/suscribed/premium/layout.tsx
+
+import { redirect } from "next/navigation";
+export default async function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
+    const session = await getServerSession(authOptions);
+    const oneTimeProductId = session?.user?.oneTimeProductId;
+    const planName = await getPlanName({ oneTimeProductId });
+
+    if (planName.toLowerCase() !== "premium") {
+         return redirect(NON_AUTHENTICATED_REDIRECT_URL)
+    }
+    else {
+        return children
+    }
+
+}
+
+```
+#### For both possibilities.
+
+```tsx src/app/suscribed/premium/layout.tsx
+import { redirect } from "next/navigation";
+export default async function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
+    const session = await getServerSession(authOptions);
+    const subscriptionId = session?.user?.subscriptionId
+    const oneTimeProductId = session?.user?.oneTimeProductId;
+    const planName = subscriptionId ? await getPlanName({ subscriptionId }) : await getPlanName({ oneTimeProductId });
+
+    if (planName.toLowerCase() !== "premium") {
+         return redirect(NON_AUTHENTICATED_REDIRECT_URL)
+    }
+    else {
+        return children
+    }
+
+}
+    
+ ```
+
 ## Change the redirects URL
 In the `app_settings.ts` file located at the `src` folder, you can change the redirects URL for the authentication system.
 Just go to the `Auth settings` section and you will find the following settings:
@@ -50,6 +126,8 @@ To configure magic link authentication, you will need to create a transactional 
 and paste the ID in the `LOOPS_MAGIC_LINK_EMAIL` located in the `app_settings.ts` file.
 
 Check the [App Settings](/docs/settings/app-settings) documentation for more details.
+
+
 
 ## Extending the authentication providers
 Since shipit use next-auth as the authentication provider, 
