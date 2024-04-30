@@ -1,0 +1,96 @@
+---
+title: "Get the env values"
+description: "How to get the environment variables in your project"
+icon: "file-shield"
+---
+
+## Google
+Obtain `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` from Google:
+
+To obtain the values for the above variables, we need to create an OAuth client on google. Just follow the next steps:
+
+1. Go to [Google Developer Console](https://console.developers.google.com/)
+2. Create a new project by clicking on the top left corner of the screen, next to the Google Cloud Platform logo.
+3. Once the project is created, click on the project name and then on the `Credentials` tab on the left side of the screen.
+4. Click on **Create Credentials** and select **OAuth client ID**. On `application type` we will select **Web Application**, then give it any name you want to reference it.
+5. Now we need to add the `JavaScript Authorized Origins`, click on "Add URI" and introduce the URL of your app, if you are using localhost on the default port it will be `http://localhost:3000`
+6. Last thing would be add a `Authorized URI Redirects`, click on "Add URI" and introduce the URL of your app followed by **/api/auth/callback/google** so it would look like this `http://localhost:3000/api/auth/callback/google`
+7. Now click on Add and it will show the `Client ID`  and the `Client Secret ID` so copy the values and paste it into the corresponding variables on the `.env` file.
+
+<Check>
+Google Provider would be successfully configured. If you wish, you can read more information about it on the [Google Provider Section of NextAuth Docs](https://next-auth.js.org/providers/google)
+</Check>
+
+## Github
+
+Obtain `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET` from Github:
+
+
+To obtain the values for the above variables, we need to create an OAuth App,
+Just follow the next steps:
+
+1. Go to [Github App Settings](https://github.com/settings/apps) 
+2. Click on `Oauth Apps` then on `New OAuth App`
+3. On `Application name`, we will introduce the name of our App, this is the name that will show when Github request access to their information during the Github sign in.
+4. On `Homepage URL` goes the Homepage URL of our app for example `http://localhost:3000`.
+5. On `Authorization callback URL` we need to introduce our App URL followed by **/api/auth/callback/github**. so it would look like this: `http://localhost:3000/api/auth/callback/github`
+6. After create it we can then copy the `Client ID`, and generate a `Client Secret` and paste it into the corresponding variables on the `.env` file
+
+<Check>
+Github Provider would be successfully configured. If you wish, you can read more information about it on the [Github Provider Section of NextAuth Docs](https://next-auth.js.org/providers/github)
+</Check>
+
+## Loops
+Loop is necessary for the emails of your app. To get the loops values you need to follow the next steps:
+
+1. Go to [Loops](https://loops.so/)
+2. Create a new account or login with your existing account.
+3. You will need to add a domain name, and set the DNS records to verify the domain.
+4. Once the domain is verified, go to the `Settings` tab and then to the `API` tab.
+5. Create a new API key and copy the value into the `LOOPS_API_KEY` variable on the `.env` file.
+
+<Check>
+Loops would be successfully configured.
+</Check>
+
+## Stripe
+Stripe is a payment service that you can use to receive payments from your users.
+To fill the necessary values you need to follow the next steps:
+
+1. Go to [Stripe](https://stripe.com/)
+2. Create a new account or login with your existing account.
+3. Once you are logged in, go to the `Developers` tab and then to the `API keys` tab.
+4. Copy the `Publishable key` and paste it into the `NEXT_PUBLIC_STRIPE_PUBLIC_KEY` variable on the `.env` file.
+5. Copy the `Secret key` and paste it into the `STRIPE_SECRET_KEY` variable on the `.env` file.
+
+Now we need to get the webhook secret:
+
+1. Install the Stripe CLI by following the instructions on the [Stripe CLI documentation](https://stripe.com/docs/stripe-cli)
+2. Run the following command to login to your Stripe account:
+```bash
+stripe login
+```
+3. Run the following command to listen for events on your Stripe account:
+```bash
+stripe listen --forward-to http://localhost:3000/api/webhooks/stripe
+```
+4. Copy the webhook secret and paste it into the `STRIPE_WEBHOOK_SECRET` variable on the `.env` file.
+
+<Check>
+Stripe would be successfully configured.
+</Check>
+
+
+## Crisp (Optional)
+Crisp is a chat service that you can use to give customer support to your users.
+The free plan should be more than enough to get you started.
+To add it to your project you need to follow the next steps:
+
+1. Go to [Crisp](https://crisp.chat/) and create an account
+2. Once you are logged in, go to the `Settings` tab and then to the `Website Settings` tab.
+3. Select your website
+4. Go to `Setup instructions` and copy the `WEBSITE_ID` value and paste it into the `NEXT_PUBLIC_CRISP_WEBSITE_ID` variable on the `.env` file.
+
+<Check>
+Crisp would be successfully configured.
+</Check>

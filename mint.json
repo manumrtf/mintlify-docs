@@ -53,8 +53,8 @@
       "group": "Get Started",
       "pages": [
         "introduction",
-        "quickstart",
-        "development"
+        "getting-env",
+        "themes"
       ]
     },
     {
@@ -64,7 +64,8 @@
         "guides/payments",
         "guides/emails",
         "guides/database",
-        "guides/seo"
+        "guides/seo",
+        "guides/production"
       ]
     },
     {
