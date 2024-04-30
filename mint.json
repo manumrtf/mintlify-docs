@@ -72,7 +72,8 @@
       "group": "Core",
       "pages": [
         "core/folder-structure",
-        "core/settings"
+        "core/settings",
+        "core/blocks"
       ]
     },
     {

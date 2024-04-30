@@ -1,5 +1,45 @@
 ---
-title: 'Go to production'
+title: 'Ship Production'
 description: 'How to deploy your project to production'
 icon: 'rocket'
 ---
+
+There are a few things that you need to have in consideration before deploying your project to production.
+
+## Environment variables
+### Stripe
+By default, Stripe uses the test environment. The keys you generated earlier are test keys. To use the live environment, you need to replace the test keys with the live keys.
+To do that, just disable stripe test mode, and generate a new set of keys.
+### Nex Auth
+You will need to update the NEXTAUTH_URL environment variable to your production URL.
+If you are using Vercel, you can completely remove the NEXTAUTH_URL variable, as Vercel will automatically set it for you.
+You will also need to update the NEXTAUTH_SECRET environment variable to a secure random string.
+You can generate a secure random string by running the following command if you are on a Unix-like system:
+```bash
+openssl rand -base64 32
+```
+If you are using Windows just go to
+[This vercel generator website](https://generate-secret.vercel.app/32)
+and fill the env variable with the generated string.
+
+## Oauth Settings
+It's time to update the url's that you have set up in the OAuth providers. 
+You will need to update the callback URL and the redirect URL to your production URL.
+replace `http://localhost:3000` with your production URL.
+
+## Deploy on Vercel
+To deploy your project on Vercel, you need to have a Vercel account.
+
+1. Go to [Vercel](https://vercel.com/)
+2. Click on the `Add new` button and select project
+3. Select the repository where your project is located in Github
+4. Copy all the environment variables from your `.env` file
+5. Open the Environment Variables section
+6. Click on the `Key` input field and paste, this will fill all your environment variables (remember to replace the test keys with the live keys if necessary)
+7. Click on the `Deploy` button
+8. Wait for the deployment to finish
+<Check>
+Your project is now live on Vercel.
+</Check>
+
+Once your project is live on Vercel, you can go to `Settings` > `Domains` and add your custom domain.

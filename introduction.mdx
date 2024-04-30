@@ -47,18 +47,18 @@ NEXTAUTH_URL="http://localhost:3000"
 NEXTAUTH_SECRET="change_this_secret_on_production"
 ```
 
-If you need help to fill the environment variables, please refer to the [Environment Variables](/docs/settings/environment-variables) documentation.
+If you need help to fill the environment variables, please refer to the [Environment Variables](/getting-env) documentation.
 
 ### 5. Make it yours with the app settings
 
 There are a lot of things you can customize easy and quick in `app_settings.ts` file located at the src folder.
-You can know further about what each setting does in the [App Settings](/docs/settings/app-settings) documentation.
+You can know further about what each setting does in the [App Settings](/core/settings) documentation.
 
 ### 6. Configure your payment plans
-To configure your plans, checkout the [plans section](/docs/settings/app-settings) in the settings documentation.
+To configure your plans, checkout the [Store Settings](/core/settings#store-settings) in the settings documentation.
 
 ### 7. Configure your email settings
-To configure your email settings, checkout the [email section](/docs/settings/app-settings) in the settings documentation.
+To configure your email settings, checkout the [Email Settings](/core/settings#email-settings) in the settings documentation.
 
 ### 8. It's done! start the development server
 
@@ -66,22 +66,22 @@ To configure your email settings, checkout the [email section](/docs/settings/ap
 npm run dev
 ```
 
-This guides may be useful for you:
+This guides may be useful for you now:
 
 <CardGroup cols={2}>
   <Card
-    title="Edit Your Docs"
-    icon="pen-to-square"
-    href="https://mintlify.com/docs/quickstart"
+    title="Folder Structure"
+    icon="folder"
+    href="/core/folder-structure"
   >
-    Get your docs set up locally for easy development
+    Get familiar with the folder structure of shipit
   </Card>
   <Card
-    title="Preview Changes"
-    icon="image"
-    href="https://mintlify.com/docs/development"
+    title="Get The Environment Variables"
+    icon="file-shield"
+    href="/getting-env"
   >
-    Preview your changes before you push to make sure they're perfect
+   If you need help to fill the environment variables, check this guide
   </Card>
 </CardGroup>
 
@@ -89,31 +89,69 @@ This guides may be useful for you:
 
 <CardGroup cols={2}>
   <Card
-    title="Customize Style"
-    icon="palette"
-    href="https://mintlify.com/docs/settings/global"
+    title="Authentication"
+    icon="lock"
+    href="/guides/authentication"
   >
-    Customize your docs to your company's colors and brands
+    Learn how authentication works in shipit
   </Card>
   <Card
-    title="Reference APIs"
-    icon="code"
-    href="https://mintlify.com/docs/api-playground/openapi"
+    title="Payments"
+    icon="credit-card"
+    href="guides/payments"
   >
-    Automatically generate endpoints from an OpenAPI spec
+    Learn how to start accepting payments in your app
   </Card>
   <Card
-    title="Add Components"
-    icon="screwdriver-wrench"
-    href="https://mintlify.com/docs/components/accordion"
+    title="Emails"
+    icon="at"
+    href="guides/emails"
   >
-    Build interactive features and designs to guide your users
+    Learn how to configure your emails in shipit
   </Card>
   <Card
-    title="Get Inspiration"
-    icon="stars"
-    href="https://mintlify.com/customers"
+    title="Database"
+    icon="database"
+    href="guides/database"
   >
-    Check out our showcase of our favorite documentation
+    Learn how to configure any database in shipit
   </Card>
 </CardGroup>
+
+<CardGroup cols={2}>
+  <Card
+    title="SEO"
+    icon="chart-simple"
+    href="guides/seo"
+  >
+    Learn how SEO works in shipit
+  </Card>
+  <Card
+    title="Theme"
+    icon="paint-roller"
+    href="/themes"
+  >
+    Learn how customize your theme
+  </Card>
+  <Card
+    title="Settings"
+    icon="gear"
+    href="core/settings"
+  >
+    Learn how to customize your app settings
+  </Card>
+  <Card
+    title="Blocks"
+    icon="database"
+    href="core/blocks"
+  >
+    Learn how to develop UI fast with blocks
+  </Card>
+</CardGroup>
+ <Card
+    title="Production"
+    icon="rocket"
+    href="guides/production"
+  >
+    Learn how to deploy your app to production
+  </Card>
