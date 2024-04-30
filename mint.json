@@ -70,12 +70,8 @@
     {
       "group": "Core",
       "pages": [
-        "core/settings",
-        "core/markdown",
-        "core/code",
-        "core/images",
-        "core/navigation",
-        "core/reusable-snippets"
+        "core/folder-structure",
+        "core/settings"
       ]
     },
     {

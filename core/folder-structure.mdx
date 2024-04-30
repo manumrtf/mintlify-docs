@@ -1,0 +1,67 @@
+---
+title: 'Folder Structure'
+description: 'The folder structure of the project in shipit'
+icon: 'folder'
+---
+```
+📦shipit
+ ┣ 📦prisma
+ ┣   ┣ 📜dev.sqlite -> The sqlite database for development
+ ┣   ┣ 📜schema.prisma -> Your prisma schema
+ ┣ 📦public
+ ┣    ┣ 📦assets -> Store here all your images
+ ┣    ┣  ┣ 📦icons -> Store here all your icons
+ ┣    ┣  ┣     ┣ 📦nextauth-providers -> Store here the icons for your auth providers with `providername.svg` format
+ ┣    ┣  ┣     ┣ 📜github.svg -> Github logo svg
+ ┣    ┣  ┣     ┣ 📜google.svg -> Google logo svg
+ ┣    ┣  ┣ 📜logo.svg -> The logo of your app
+ ┣    ┣  ┣ 📜placeholder.svg -> A placeholder image for the blocks examples
+ ┣ 📦src
+      ┣ 📦app    
+      ┣  ┣ 📦(authenticated) -> Place here all your routes for authenticated users
+      ┣  ┣ 📦(subscribed) -> Place here all your routes for suscribed users
+      ┣  ┣ 📦api -> The api routes for your application
+      ┣  ┣ 📦blog -> The blog routes
+      ┣  ┣ 📦pricing -> The pricing page
+      ┣  ┣ 📦privacy-policy -> The privacy policy page
+      ┣  ┣ 📦signin -> The Sign In page
+      ┣  ┣ 📦signup -> The Sign Up Page
+      ┣  ┣ 📦terms-of-service -> The TOS Page
+      ┣  ┣ 📦verify-request -> The page that shows user to check their email when doing magic-link auth
+      ┣  ┣ 📜error.tsx -> Error handlers
+      ┣  ┣ 📜not-found.tsx -> 404 page
+      ┣  ┣ 📜layout.tsx -> Global layout
+      ┣  ┣ 📜page.tsx -> Home page
+      ┣  ┣ 📜sitemap.ts -> File that generate the sitemap
+      ┣  ┣ 📜globals.css -> Global CSS file
+      ┣  ┣ 📜favicon.ico -> Favicon of your project
+      ┣ 📦blog_content
+      ┣  ┣ 📦components -> Components for your MDX files
+      ┣  ┣ 📦posts -> Your blog posts MDX files
+      ┣ 📦components
+      ┣  ┣ 📦auth -> Auth components
+      ┣  ┣ 📦blocks -> Pre-defined blocks components
+      ┣  ┣ 📦base-> Components abstractions
+      ┣  ┣ 📦blog -> Blog components
+      ┣  ┣ 📦dev -> Components for development 
+      ┣  ┣ 📦support -> Components for customer support
+      ┣  ┣ 📦ui -> Shadcn UI components
+      ┣  📦lib -> Utility functions of Shadcn
+         📦server
+            ┣ 📦auth -> Next-auth related files
+            ┣ 📦helpers -> Server-side only helper functions
+         📦types -> Your typescript types
+         📜app_settings.ts -> Your app settings
+         📜env.ts -> Type-safe definition of your env variables
+         📜env.example -> Example env file
+         📜.eslintrc.json -> ESLint config file
+         📜.gitignore -> The git ignore File
+         📜components.json -> Shadcn config file
+         📜next-env.d.ts -> Nextjs typescript definitions file
+         📜next.config.mjs -> Nextjs config file
+         📜package.json -> The package json with the project dependencies
+         📜postcss.config.js -> The postcss config file
+         📜tailwind.config.js -> Tailwindcss config file
+         📜tsconfig.json -> Type-safe definition of your env variables
+         📜README.md -> Markdown file for your github repo
+```
