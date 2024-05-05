@@ -43,67 +43,50 @@ you can wrap the folder with parentheses to avoid URL changes.
 ```
 Now we can use the layout to protect all the routes within the folder for the premium plan.
 
-#### For recurring subscriptions.
 
 ```tsx src/app/suscribed/premium/layout.tsx
-
+import StripeServer from "stripe";
 import { redirect } from "next/navigation";
+import { NON_AUTHENTICATED_REDIRECT_URL, NON_SUSCRIBED_REDIRECT_URL } from "@/app_settings";
+import { authOptions } from "@/server/auth/options"
+import { getServerSession } from "next-auth"
+import { redirect } from "next/navigation";
+import { env } from "@/env";
+import { getPlanName } from "@/server/helpers/stripe/subscriptions/get-plan-name";
 
 export default async function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
     const session = await getServerSession(authOptions);
-    const subscriptionId = session?.user?.subscriptionId
-    const oneTimeProductId = session?.user?.oneTimeProductId;
     const planName = await getPlanName({ subscriptionId });
-
-    if (planName.toLowerCase() !== "premium") {
-         return redirect(NON_AUTHENTICATED_REDIRECT_URL)
+    if (!session?.user || planName.toLowerCase() !== "premium"{
+        return redirect(NON_AUTHENTICATED_REDIRECT_URL)
     }
+
+    const subscriptionId = session?.user?.subscriptionId;
+
+    if (!subscriptionId) {
+        // user has no subscription, redirect to the non subscribed page
+        return redirect(NON_SUSCRIBED_REDIRECT_URL)
+    }
+
+    // user has a subscription, check if it's active
+
+    const stripe = new StripeServer(env.STRIPE_SECRET_KEY);
+    const subscription = await stripe.subscriptions.retrieve(subscriptionId as string);
+
+    if (subscription.status !== "active") {
+        // subscription is not active, redirect to the non subscribed page
+        return redirect(NON_SUSCRIBED_REDIRECT_URL)
+    }
+
+    // subscription is active, render the children
     else {
         return children
     }
 
 }
+
 ```
-#### For one-time payments.
 
-```tsx src/app/suscribed/premium/layout.tsx
-
-import { redirect } from "next/navigation";
-export default async function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
-    const session = await getServerSession(authOptions);
-    const oneTimeProductId = session?.user?.oneTimeProductId;
-    const planName = await getPlanName({ oneTimeProductId });
-
-    if (planName.toLowerCase() !== "premium") {
-         return redirect(NON_AUTHENTICATED_REDIRECT_URL)
-    }
-    else {
-        return children
-    }
-
-}
-
-```
-#### For both possibilities.
-
-```tsx src/app/suscribed/premium/layout.tsx
-import { redirect } from "next/navigation";
-export default async function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
-    const session = await getServerSession(authOptions);
-    const subscriptionId = session?.user?.subscriptionId
-    const oneTimeProductId = session?.user?.oneTimeProductId;
-    const planName = subscriptionId ? await getPlanName({ subscriptionId }) : await getPlanName({ oneTimeProductId });
-
-    if (planName.toLowerCase() !== "premium") {
-         return redirect(NON_AUTHENTICATED_REDIRECT_URL)
-    }
-    else {
-        return children
-    }
-
-}
-    
- ```
 
 ## Change the redirects URL
 In the `app_settings.ts` file located at the `src` folder, you can change the redirects URL for the authentication system.
@@ -122,10 +105,8 @@ export const NON_SUSCRIBED_REDIRECT_URL = "/pricing"; // where to redirect if th
 This is pretty much self-explanatory, but you can check more details about each setting in the [Auth Settings](/core/settings#auth-settings).
 
 ## Configure Magic Link authentication
-To configure magic link authentication, you will need to create a transactional email in loops, 
-and paste the ID in the `LOOPS_MAGIC_LINK_EMAIL` located in the `app_settings.ts` file.
-
-If you don't know how to do this, heck the [Email Guide](/guides/emails) documentation for more details.
+To configure magic link authentication, you will need to have configured emails first.
+If you have it configured, then you don't need to do anything else, the magic link authentication will work out of the box.
 
 
 

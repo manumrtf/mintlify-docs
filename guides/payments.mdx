@@ -13,47 +13,68 @@ There, copy the content of the `API_ID` field. should look something like this: 
 
 Repeat the process for each plan you want to create.
 
-## Adding it to your app
+## Adding subscriptions to your app
 
-open the `app_settings.ts` file located at the `src` folder and fill the `plans` array with the plans you just created.
+You just need to use the `RecurringCheckoutButton` that you can import from `@/components/store/checkout-button`
 
-Let's put as an example that I have 3 plans, `Basic`, `Standard` and `Premium`.
+It only takes one prop, the `priceId` that you copied from the stripe dashboard.
 
-The basic and premium plans are recurring plans, while the standard plan is a one-time payment. The config would look like this:
-
-```ts src/app_settings.ts
-export const STORE_PLANS = [
-  {
-    title: "Basic",
-    price: "$99",
-    description:
-      "Best for small business owners, startups who needs landing page for their business.",
-    features: ["Thing number 1", "Thing number 2", "Thing number 3"],
-    priceId: "price_xxxxxxxxxxxxxx",
-    type: "recurring"
-  },
-  {
-    title: "Standard",
-    price: "$199",
-    description:
-      "Best for small business owners, startups who needs landing page for their business.",
-    features: ["Thing number 1", "Thing number 2", "Thing number 3", "Thing number 4"],
-    highlight: true,
-    priceId: "price_xxxxxxxxxxxxxx",
-    type: "one-time"
-
-  },
-  {
-    title: "Premium",
-    price: "$299",
-    description:
-      "Best for small business owners, startups who needs landing page for their business.",
-    features: ["Thing number 1", "Thing number 2", "Thing number 3", "Thing number 4", "Thing number 5"],
-    priceId: "price_xxxxxxxxxxxxxx",
-    type: "recurring"
-
-  },
-];
+```tsx
+<RecurringCheckoutButton priceId={"price_xxxxxxxxxxxxxx"}>Start now</RecurringCheckoutButton>
 ```
 
-That's it! Now you have your plans configured in your app. Navigate to the `/pricing` page and you should see your plans there.
+<Check>
+That's all, that would take you to the stripe checkout page where the user can subscribe to the plan, and it will handle all the rest.
+</Check>
+
+If you want a pre-defined ui to show your different plans, you can use the `ProductCard` component like so:
+
+
+```tsx
+ <ProductCard
+          title="Basic"
+          price="$99"
+          description="Best for small business owners, startups who needs landing page for their business."
+          features={["Thing number 1", "Thing number 2", "Thing number 3"]}
+          purchaseButton={<RecurringCheckoutButton priceId={"price_1PAAVxJ6IFM3omoTJ2kigCqW"}>Start now</RecurringCheckoutButton>}
+
+        />
+ ```
+## Add one-time payments to your app
+
+In the prisma schema, you will find this model:
+
+```prisma
+model OneTimeProduct {
+  id              String @id @default(cuid())
+  stripeProductId String @unique
+  name            String
+  users           User[]
+}
+```
+
+There, you can add the one-time payment products you want to sell in your app.
+To add them, you can use, for example, prisma studio, opening the terminal and running `npx prisma studio`.
+Then going to the `OneTimeProduct` table and adding the products you want to sell.
+
+Now, you just need to render a `OneTimeCheckoutButton` component, that you can import from `@/components/store/checkout-button`.
+
+It takes two props, the `productId` and the `priceId` of the product. Both you can get from the stripe dashboard.
+
+You can also use the pre-defined `ProductCard` component to show your products.
+
+```tsx
+  <ProductCard
+          title="My Product"
+          price="$199"
+          description="Best for small business owners, startups who needs landing page for their business."
+          features={["Thing number 1", "Thing number 2", "Thing number 3"]}
+          purchaseButton={<OneTimeCheckoutButton priceId="price_xxxxxxxxxxxxxx" productId="prod_xxxxxxxxxxxxxx">Buy now</OneTimeCheckoutButton>}
+
+        />
+```
+
+<Check>
+You have now configured payments in your app.
+</Check>
+

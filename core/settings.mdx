@@ -185,113 +185,31 @@ Example: `My blog description`
 
 If you never used Stripe, you will find useful the [Payments Guide](/guides/payments)
 
-<ResponseField name="STORE_PLANS" type="Plan[]" required>
-  An array containing all the paid plans of your app.
-  <Expandable title="Navigation">
-    <ResponseField name="title" type="string" required>
-    The title of the plan.
-
-    Example: `Basic`
-
-    </ResponseField>
-    <ResponseField name="price" type="string" required>
-    The visible price that will show on the UI. This is not used for payment processing.
-    Your payment processor will handle the actual price.
-
-    Example: `$99`
-
-    </ResponseField>
-    <ResponseField name="description" type="string" required>
-    The description of the plan.
-
-    Example: `This is the basic plan`
-
-    </ResponseField>
-    <ResponseField name="features" type="string[]" required>
-    An array containing all the features of the plan.
-
-    Example: `["Feature 1", "Feature 2"]`
-
-    </ResponseField>
-    
-    <ResponseField name="highlight" type="boolean" required>
-    If true, this plan will be highlighted on the pricing page.
-
-    Example: `true`
-
-    </ResponseField>
-
-    <ResponseField name="priceId" type="string" required>
-    The price id associated with this plan in stripe.
-
-    Example: `price_xxxxxxxx`
-
-    </ResponseField>
-
-    <ResponseField name="type" type="recurring | one-time" required>
-    The type of the plan. This will only affect how the plan is displayed on the pricing page.
-    The recurrence of the plan is handled by your payment processor.
-
-    Example: `recurring`
-
-    </ResponseField>
-  </Expandable>
-</ResponseField>
-
-
-<ResponseField name="STORE_PLANS_SHOW_NOT_INCLUDED_FEATURES" type="boolean" required>
-If true, each plan on the pricing page will show the features that are not included compared
-to the previous plan.
-
-Default: `false`
-
-</ResponseField>
 
 <ResponseField name="AFTER_PURCHASE_REDIRECT_URL" type="string" required>
-The URL to redirect the user to after they purchase a plan
+The URL to redirect the user to after they suscribe to a plan
 
 Default: `/dashboard`
 
 </ResponseField>
 
+<ResponseField name="AFTER_SUBSCRIPTION_REDIRECT_URL" type="string" required>
+The URL to redirect purchase a product that is one-time paid, not a subscription
+
+Default: `/`
+
+</ResponseField>
+
 ### Email settings
 
-If you never used loops, you will find useful the [Email Guide](/guides/emails) 
+If you never used Resend, you will find useful the [Email Guide](/guides/emails) 
 
-<ResponseField name="LOOPS_MAGIC_LINK_EMAIL" type="string" required>
-The transactional id of the loops email that you want to send when a user signs up
+<ResponseField name="EMAIL_FROM" type="string" required>
 
-</ResponseField>
-
-<ResponseField name="LOOPS_SUBSCRIPTION_EMAIL" type="string | null" required>
-The transactional id of the loops email that you want to send when a user subscribes
+The email address that will be used as the sender of all emails
 
 </ResponseField>
 
-<ResponseField name="LOOPS_SUSCRIBED_GROUP" type="string" required>
-The name of the group in loops that you want to add the user when they subscribe
-
-</ResponseField>
-
-<ResponseField name="LOOPS_ABANDONED_CART_EMAIL" type="string | null" required>
-The transactional id of the loops email that you want to send when a user abandons a cart
-
-</ResponseField>
-
-<ResponseField name="LOOPS_INVOICE_PAID_EMAIL" type="string | null" required>
-The transactional id of the loops email that you want to send when a user invoice is paid (recurrent payment)
-
-</ResponseField>
-
-<ResponseField name="LOOPS_INVOICE_FAILED_EMAIL" type="string | null" required>
-The transactional id of the loops email that you want to send when a user invoice payment fails (recurrent payment)
-
-</ResponseField>
-
-<ResponseField name="LOOPS_SUBSCRIPTION_DELETED_EMAIL" type="string | null" required>
-The transactional id of the loops email that you want to send when a user subscription is deleted
-
-</ResponseField>
 
 
 
