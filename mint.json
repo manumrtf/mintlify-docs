@@ -2,10 +2,10 @@
   "$schema": "https://mintlify.com/schema.json",
   "name": "Shipit Docs",
   "logo": {
-    "dark": "/logo/dark.svg",
-    "light": "/logo/light.svg"
+    "dark": "/logo/logo.svg",
+    "light": "/logo/logo.svg"
   },
-  "favicon": "/favicon.svg",
+  "favicon": "/logo/logo-short.svg",
   "colors": {
     "primary": "#FFC048",
     "light": "#FFC048",
