@@ -10,6 +10,17 @@ There are a few things that you need to have in consideration before deploying y
 ### Stripe
 By default, Stripe uses the test environment. The keys you generated earlier are test keys. To use the live environment, you need to replace the test keys with the live keys.
 To do that, just disable stripe test mode, and generate a new set of keys.
+
+You will also need to go to the Stripe Webhooks section, and add your production URL and listen for the following events:
+- `customer.subscription.created`
+- `charge.succeeded`
+- `checkout.session.expired`
+- `invoice.paid`
+- `invoice.payment_failed`
+- `customer.subscription.deleted`
+
+Now replace the `STRIPE_WEBHOOK_SECRET` environment variable with one for production.
+
 ### Nex Auth
 You will need to update the NEXTAUTH_URL environment variable to your production URL.
 If you are using Vercel, you can completely remove the NEXTAUTH_URL variable, as Vercel will automatically set it for you.
@@ -26,6 +37,10 @@ and fill the env variable with the generated string.
 It's time to update the url's that you have set up in the OAuth providers. 
 You will need to update the callback URL and the redirect URL to your production URL.
 replace `http://localhost:3000` with your production URL.
+
+## Update your production URL
+
+go to `src/app_settings.ts` and update the `APP_DOMAIN` variable with your production URL.
 
 ## Deploy on Vercel
 To deploy your project on Vercel, you need to have a Vercel account.

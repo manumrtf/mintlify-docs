@@ -23,6 +23,14 @@ Example: `my awesome app`
 
 </ResponseField>
 
+<ResponseField name="APP_DOMAIN" type="string" required>
+The domain of your app
+
+default: `process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : 'https://yourprodurl';`
+
+</ResponseField>
+
+
 <ResponseField name="APP_LANG" type="string" required>
 The language of your app, used for the HTML lang attribute
 
@@ -103,12 +111,7 @@ Default: `/profile`
 
 </ResponseField>
 
-<ResponseField name="AFTER_SIGNUP_REDIRECT_URL" type="string" required>
-Where to redirect the user after signing up
 
-Default: `/profile`
-
-</ResponseField>
 
 <ResponseField name="NON_AUTHENTICATED_REDIRECT_URL" type="string" required>
 Where to redirect the user if they try to access a route that requires authentication without being authenticated
@@ -200,15 +203,7 @@ Default: `/`
 
 </ResponseField>
 
-### Email settings
 
-If you never used Resend, you will find useful the [Email Guide](/guides/emails) 
-
-<ResponseField name="EMAIL_FROM" type="string" required>
-
-The email address that will be used as the sender of all emails
-
-</ResponseField>
 
 
 

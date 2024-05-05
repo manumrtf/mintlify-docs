@@ -15,7 +15,7 @@ Get started with shipit is really simple, just follow these steps:
 Open a terminal and run the following command:
 
 ```bash
-git clone repo
+git clone https://github.com/manumrtf/shipit
 ```
 
 ### 2. Install dependencies
@@ -23,13 +23,8 @@ git clone repo
 cd shipit
 npm install
 ```
-### 3. Fill the database
-For a quick development, shipit use sqlite as database by default. To fill the database with the neccesary tables, run the following command:
-```bash
-npx prisma db push
-npx prisma generate
-```
-### 4. Fill the environment variables
+
+### 3. Fill the environment variables
 Create a `.env` file in the root of the proyect and copy-paste the content from the `.env.example` file.
 The file will look like this:
 ```bash
@@ -42,25 +37,26 @@ RESEND_API_KEY=""
 NEXT_PUBLIC_CRISP_WEBSITE_ID=""
 STRIPE_SECRET_KEY=""
 STRIPE_WEBHOOK_SECRET=""
-NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=""
+EMAIL_FROM=""
 NEXTAUTH_URL="http://localhost:3000"
-NEXTAUTH_SECRET="change_this_secret_on_production"
+NEXTAUTH_SECRET="changethisonproduction"
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=""
 ```
-
 If you need help to fill the environment variables, please refer to the [Environment Variables](/getting-env) documentation.
 
-### 5. Make it yours with the app settings
 
-There are a lot of things you can customize easy and quick in `app_settings.ts` file located at the src folder.
-You can know further about what each setting does in the [App Settings](/core/settings) documentation.
+### 4. Fill the database
+For a quick development, shipit use sqlite as database by default. To fill the database with the neccesary tables, run the following command:
+```bash
+npx prisma db push
+npx prisma generate
+```
 
-### 6. Configure your payment plans
+### 5. Configure your payment plans
 To configure your plans, checkout the [Store Settings](/core/settings#store-settings) in the settings documentation.
 
-### 7. Configure your email settings
-To configure your email settings, checkout the [Email Settings](/core/settings#email-settings) in the settings documentation.
 
-### 8. It's done! start the development server
+### 6. It's done! start the development server
 
 ```bash
 npm run dev
