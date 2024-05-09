@@ -40,7 +40,11 @@ replace `http://localhost:3000` with your production URL.
 
 ## Update your production URL
 
-go to `src/app_settings.ts` and update the `APP_DOMAIN` variable with your production URL.
+go to `src/app_settings.ts` and update the `APP_DOMAIN` variable with your production URL like so:
+```ts src/app_settings.ts
+export const APP_DOMAIN = process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : 'https://hereyourproductionurl.com';
+```
+
 
 ## Deploy on Vercel
 To deploy your project on Vercel, you need to have a Vercel account.
