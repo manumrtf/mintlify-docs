@@ -9,10 +9,11 @@ Then, go to domains and add a new domain. You will find the instructions to add 
 
 Once your domain is verified, go to API Keys and create a new key. Copy the key and fill the `RESEND_API_KEY` in your `.env` file.
 
-Lastly, go to `src/app_settings.ts` and fill the `EMAIL_FROM` with the email you want to send emails from.
+Lastly, fill the EMAIL_FROM environment variable with the domain you configured in Resend.
 
 For example, if the domain I configured is `mail.shipit.so` and I want to use customers as name, I will fill the `EMAIL_FROM` with
-```ts src/app_settings.ts
+
+```ts .env
 export const EMAIL_FROM = "customers@mail.shipit.so"
 ```
 
