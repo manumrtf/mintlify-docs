@@ -104,6 +104,38 @@ export const NON_SUSCRIBED_REDIRECT_URL = "/pricing"; // where to redirect if th
 
 This is pretty much self-explanatory, but you can check more details about each setting in the [Auth Settings](/core/settings#auth-settings).
 
+## Remove one of the default authentication providers
+The authentication providers are set in `src/server/auth/providers.ts`.
+
+```ts src/server/auth/providers.ts
+export const providers: Provider[] = [
+  GoogleProvider({
+    clientId: env.GOOGLE_CLIENT_ID,
+    clientSecret: env.GOOGLE_CLIENT_SECRET,
+  }),
+  GithubProvider({
+    clientId: env.GITHUB_CLIENT_ID,
+    clientSecret: env.GITHUB_CLIENT_SECRET,
+  }),
+  EmailProvider({
+    async sendVerificationRequest({ identifier: email, url }) {
+      await resend.emails.send({
+        from: env.EMAIL_FROM,
+        to: email,
+        subject: `Sign in to ${APP_NAME}`,
+        react: MagicLinkTemplate({ link: url }),
+        html: ""
+      })
+    },
+  }),
+```
+Those are the default providers, to remove one of them, just remove the provider from the array.
+If you remove an Oauth provider, like Google or Github, 
+you will also need to remove the typesafe environment variables from the `src/env.ts` file.
+
+
+
 ## Extending the authentication providers
-Since shipit use next-auth as the authentication provider, 
+The authentication providers are set in `src/server/auth/providers.ts`.
+Since Shipit use next-auth as the authentication system, 
 you can easily extend the authentication providers by following the [next-auth documentation](https://next-auth.js.org/providers).

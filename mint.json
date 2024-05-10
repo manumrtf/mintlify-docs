@@ -58,7 +58,8 @@
       "pages": [
         "core/folder-structure",
         "core/settings",
-        "core/blocks"
+        "core/blocks",
+        "core/typesafe-env"
       ]
     }
   ],

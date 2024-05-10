@@ -1,0 +1,67 @@
+---
+title: 'Typesafe Env'
+description: 'Learn how to use the typesafe env variables in shipit'
+icon: 'shield'
+---
+
+Shipit uses a typesafe environment variable system that allows you to define the environment variables that your application needs,
+making sure that you have all the required variables and that they are of the correct type.
+
+It uses [Zod](https://zod.dev) library to define the schema of the environment variables.
+
+You can find the environment variables definition in the `src/env.ts` file that will look like this:
+
+```tsx src/env.ts
+export const env = createEnv({
+    server: {
+        DATABASE_URL: z.string().url(),
+        GOOGLE_CLIENT_ID: z.string().min(1),
+        GOOGLE_CLIENT_SECRET: z.string().min(1),
+        GITHUB_CLIENT_ID: z.string().min(1),
+        GITHUB_CLIENT_SECRET: z.string().min(1),
+        RESEND_API_KEY: z.string().min(1),
+        STRIPE_SECRET_KEY: z.string().min(1),
+        STRIPE_WEBHOOK_SECRET: z.string().min(1),
+        EMAIL_FROM: z.string().email(),
+        NEXTAUTH_SECRET: z.string().min(1),
+        NEXTAUTH_URL: z.string().url(),
+    },
+    client: {
+        NEXT_PUBLIC_CRISP_WEBSITE_ID: z.string().min(1).optional(),
+        NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: z.string().min(1),
+
+    },
+
+    // For Next.js >= 13.4.4, you only need to destructure client variables:
+    experimental__runtimeEnv: {
+        NEXT_PUBLIC_CRISP_WEBSITE_ID: process.env.NEXT_PUBLIC_CRISP_WEBSITE_ID,
+        NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
+    }
+});
+```
+
+## Adding a server environment variable
+Server environment variables are the ones that are not exposed to the client, like API keys, database credentials, etc.
+To add one, just add a new key to the `server` object with the name of the variable and the type that it should be.
+
+## Adding a client environment variable
+Client environment variables are the ones that are exposed to the client, like the Stripe publishable key, Crisp website ID, etc.
+To add one, just add a new key to the `client` object with the name of the variable prefixed with `NEXT_PUBLIC_`. 
+You will also need to destructure it on the `experimental__runtimeEnv` object.
+
+For example, if you want to add a new variable called `MY_CLIENT_VARIABLE`, you should add it like this:
+
+```tsx src/env.ts
+    export const env = createEnv({
+        server: {
+            // ...
+        },
+        client: {
+            NEXT_PUBLIC_MY_CLIENT_VARIABLE: z.string().min(1),
+        },
+        experimental__runtimeEnv: {
+            NEXT_PUBLIC_MY_CLIENT_VARIABLE: process.env.NEXT_PUBLIC_MY_CLIENT_VARIABLE,
+        }
+    });
+    ```
+    
